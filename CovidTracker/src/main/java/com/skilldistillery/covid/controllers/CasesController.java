@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -68,25 +69,38 @@ public class CasesController {
 		}
 
 	}
-	
+
 	@PutMapping("cases/{id}")
-	public Cases putCases(@PathVariable Integer id , @RequestBody Cases cases, HttpServletResponse response, HttpServletRequest request) {
-		
+	public Cases putCases(@PathVariable Integer id, @RequestBody Cases cases, HttpServletResponse response,
+			HttpServletRequest request) {
+
 		try {
 			cases = casesSvc.replace(id, cases);
 			StringBuffer reqUrl = request.getRequestURL();
 			reqUrl.append("/").append(cases.getId());
-			response.setHeader("Location",reqUrl.toString());
+			response.setHeader("Location", reqUrl.toString());
 			return cases;
-		
+
 		} catch (Exception e) {
 			e.printStackTrace();
 			response.setStatus(400);
 			return null;
 		}
-		
-		
-		
+
+	}
+
+	@DeleteMapping("cases/{id}")
+	public void delete(@PathVariable Integer id, HttpServletResponse response, HttpServletRequest request) {
+		boolean isDeleted = casesSvc.deleteById(id);
+		if (isDeleted) {
+			StringBuffer reqUrl = request.getRequestURL();
+			reqUrl.append("/").append(id);
+			response.setStatus(200);
+			response.setHeader("Location", reqUrl.toString());
+
+		} else {
+			response.setStatus(404);
+		}
 	}
 
 }
