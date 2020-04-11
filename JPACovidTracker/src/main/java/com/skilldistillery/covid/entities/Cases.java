@@ -1,10 +1,10 @@
 package com.skilldistillery.covid.entities;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Table;
 
 @Entity
 
@@ -19,11 +19,17 @@ public class Cases {
 	private String state;
 	private Integer positive;
 	private Integer negative;
+	
+	@Column (name = "in_icu")
 	private Integer inIcu;
+	
+	@Column (name = "on_ventilator")
 	private Integer onVentilator;
 	private Integer recovered;
 	private Integer death;
 	private Integer hospitalized;
+	
+	@Column (name = "total_test_result")
 	private Integer totalTestResult;
 	
 	
