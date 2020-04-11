@@ -1,4 +1,4 @@
-package com.skilldistillery.covid.entities.cases;
+package com.skilldistillery.covid.entities;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -12,6 +12,8 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import com.skilldistillery.covid.entities.Cases;
 
 class CasesTest {
 	
@@ -45,7 +47,7 @@ class CasesTest {
 	@Test
 	void test() {
 		assertNotNull(cases);
-		assertEquals("United States", cases.getName());
+		assertEquals("AK", cases.getState());
 	}
 
 }

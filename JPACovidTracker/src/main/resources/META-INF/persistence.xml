@@ -9,7 +9,8 @@
     </provider>
     
     <!-- entities -->
-     <class>com.skilldistillery.covid.entities.Cases</class>
+   
+     <class> com.skilldistillery.covid.entities.Cases</class>
      
 
     <!-- end entities  -->
