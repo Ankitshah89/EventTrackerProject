@@ -1,20 +1,31 @@
 <!DOCTYPE html>
 <html>
-<head>
-<meta charset="UTF-8">
-<title>Covid Tracker</title>
-<script src="js/script.js" type="text/javascript"></script>
-</head>
-<body>
+	<head>
+		<link href="https://fonts.googleapis.com/css?family=Sriracha&display=swap" rel="stylesheet">
+		<script src="js/script.js"></script>
 
-	<h1>Welcome to Covid Tracker</h1>
+	</head>
+	<body>
+		<header>
+	  <h1>Covid Tracker</h1>
+	 
+	</header>
 
-	<!-- TODO: Search field and button -->
-	<!-- TODO: Event detail div with update/delete buttons -->
-	<!--  TODO : List all events when page loads -->
-	<!--  TODO : New event form -->
-	<!--  TODO : Edit event form -->
-	<!--  TODO : Edit event form -->
+	<form name="caseForm">
+		<input type="number" name="caseId">
+		<button name="lookup">Get Case By ID</button>
+		<input type="button" value="List All" name="listAll" style="float:right;">
+	</form>
 
-</body>
+
+
+
+<div id="output">
+	<br>
+<div id="caseData">
+</div>
+
+</div>
+
+	</body>
 </html>
