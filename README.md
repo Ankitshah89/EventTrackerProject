@@ -12,7 +12,7 @@ This project works around Spring Rest C.R.U.D. API. My event tracker is an api t
 |-------------------|---------------------------|------------------------------------|
 | `List<Cases>`     |`GET api/cases`            | Gets all Covid Cases               |
 | `Cases`           |`GET api/cases/{id}`       | Gets one Case by id                |
-| `List<Cases>`     |`GET api/search/{keyword}` | Finds cases by State acronym       |
+| `List<Cases>`     |`GET api/cases/search/{keyword}` | Finds cases by State acronym       |
 | `Cases`           |`POST api/cases`           | Creates a new Case                 |
 | `Cases`           |`PUT api/cases/{id}`       | Replaces an existing Case by id    |
 | `Void`            |`DELETE api/cases/{id}`    | Deletes an existing Case by id     |
