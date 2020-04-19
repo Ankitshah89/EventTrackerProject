@@ -140,7 +140,7 @@ function showUpdateForm(cases){
    updateForm.recovered.value = cases.recovered;
    updateForm.death.value = cases.death;
    updateForm.hospitalized.value = cases.hospitalized;
-   updateForm.totalTestResults.value = cases.totalTestResults;
+   updateForm.totalTestResults.value = cases.totalTestResult;
 
 
 }
