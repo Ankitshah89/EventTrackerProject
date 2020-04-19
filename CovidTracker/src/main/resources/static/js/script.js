@@ -113,30 +113,24 @@ function displaySingleCases(cases) {
 	deleteButton.innerHTML = "Delete Case";
 	dataDiv.appendChild(deleteButton);
 	deleteButton.addEventListener('click',function(event){
+		var txt;
 		event.preventDefault();
+		var del = confirm("Are you sure you want to delete");
+		if(del == true ){
 		deleteCase(cases.id);
+		}else{
+		 txt = "You decided not to delete !!!!"
+		}
+		document.getElementById('caseData').innerHTML = txt;
 	});
 
 	
 }
 
-function deleteFunction(e) {
-	confirm("Are you sure you want to delete this case?");
-	var fastId = e.id;
-	
-	if (fastId != null ) {
-	  
-	}
-	  
-	else window.prompt("Please enter a valid ID")
-	
-	  deleteRow(caseId);
-	
-  }
 
 
 function showUpdateForm(cases){
-   console.log("old state " + cases.state);
+   
    let updateForm = document.getElementById('updateForm');
    updateForm.state.value = cases.state; 
    updateForm.positive.value = cases.positive;
@@ -147,8 +141,6 @@ function showUpdateForm(cases){
    updateForm.death.value = cases.death;
    updateForm.hospitalized.value = cases.hospitalized;
    updateForm.totalTestResults.value = cases.totalTestResults;
-
-   console.log("New state "+ cases.state)
 
 
 }
@@ -308,7 +300,6 @@ let tableHead = document.createElement('thead');
 
 
 function updateCase(cases){
-	console.log("old state: " + cases.state);
 	var xhr = new XMLHttpRequest();
 	xhr.open('PUT','api/cases/'+ cases.id,true);
 	xhr.setRequestHeader("Content-type", "application/json");
@@ -333,7 +324,6 @@ let data = {
 				totalTestResult: form.totalTestResults.value
 
 }
-console.log("updated state " + data.state);
 xhr.send(JSON.stringify(data));
 }
 
