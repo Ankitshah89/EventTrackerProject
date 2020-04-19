@@ -15,6 +15,23 @@ function init() {
 		getAllCases();
 	});
 
+	document.newForm.submit.addEventListener('click', function(event) {
+		event.preventDefault();
+		let form = document.newForm;
+		let cases = {
+				state: form.state.value,
+				positive: form.positive.value,
+				negative: form.negative.value,
+				inIcu: form.inIcu.value,
+				onVentilator: form.onVentilator.value,
+				recovered: form.recovered.value,
+				death: form.death.value,
+				hospitalized: form.hospitalized.value,
+				totalTestResult: form.totalTestResults.value
+		};
+		createCases(cases);
+	});
+
 }
 
 function getCasesById(caseId) {
@@ -41,31 +58,6 @@ function getCasesById(caseId) {
 	}
 	xhr.send();
 }
-
-
-function getAllCases() {
-	let xhr = new XMLHttpRequest();
-	xhr.open('GET', 'api/cases');
-	xhr.onreadystatechange = function() {
-		if (xhr.readyState === 4) {
-			switch (xhr.status) {
-			case 200:
-				let casesJson = xhr.responseText;
-				let cases = JSON.parse(casesJson);
-				displayAllCases(cases);
-				break;
-			case 404:
-				displayNotFound("Invalid  ID");
-				break;
-			default:
-				displayNotFound("Error occurred: " + xhr.status);
-				break;
-			}
-		}
-	}
-	xhr.send();
-}
-
 
 function displaySingleCases(cases) {
 	var dataDiv = document.getElementById('caseData');
@@ -94,7 +86,7 @@ function displaySingleCases(cases) {
 	li.textContent = 'Recovered : ' + cases.recovered;
 	ul.appendChild(li);
 	li = document.createElement('li');
-	li.textContent = 'Death : ' + cases.death ;
+	li.textContent = 'Death : ' + cases.death;
 	ul.appendChild(li);
 	li.textContent = 'Hospitalized : ' + cases.hospitalized;
 	ul.appendChild(li);
@@ -102,14 +94,127 @@ function displaySingleCases(cases) {
 	li.textContent = 'Total Test Results : ' + cases.totalTestResult ;
 	ul.appendChild(li);
 	
+	let editButton = document.createElement('button');
+	editButton.innerHTML = "Edit Case";
+	dataDiv.appendChild(editButton);
+	editButton.addEventListener('click',function(event){
+		event.preventDefault();
+		showUpdateForm(cases);
+	});
+
+	document.getElementById('update').addEventListener('click',function(event){
+		event.preventDefault();
+		console.log("need to update"+ cases.id);
+		// let form = document.getElementById('updateForm');
+		updateCase(cases);
+	});
+
+	let deleteButton = document.createElement('button');
+	deleteButton.innerHTML = "Delete Case";
+	dataDiv.appendChild(deleteButton);
+	deleteButton.addEventListener('click',function(event){
+		event.preventDefault();
+		deleteCase(cases.id);
+	});
+
 	
 }
+
+function deleteFunction(e) {
+	confirm("Are you sure you want to delete this case?");
+	var fastId = e.id;
+	
+	if (fastId != null ) {
+	  
+	}
+	  
+	else window.prompt("Please enter a valid ID")
+	
+	  deleteRow(caseId);
+	
+  }
+
+
+function showUpdateForm(cases){
+   console.log("old state " + cases.state);
+   let updateForm = document.getElementById('updateForm');
+   updateForm.state.value = cases.state; 
+   updateForm.positive.value = cases.positive;
+   updateForm.negative.value = cases.negative;
+   updateForm.inIcu.value = cases.inIcu;
+   updateForm.onVentilator.value =cases.onVentilator;
+   updateForm.recovered.value = cases.recovered;
+   updateForm.death.value = cases.death;
+   updateForm.hospitalized.value = cases.hospitalized;
+   updateForm.totalTestResults.value = cases.totalTestResults;
+
+   console.log("New state "+ cases.state)
+
+
+}
+
+function getAllCases() {
+	let xhr = new XMLHttpRequest();
+	xhr.open('GET', 'api/cases',true);
+	xhr.onreadystatechange = function() {
+		if (xhr.readyState === 4) {
+			switch (xhr.status) {
+			case 200:
+				let casesJson = xhr.responseText;
+				let cases = JSON.parse(casesJson);
+				displayAllCases(cases);
+				break;
+			case 404:
+				displayNotFound("Invalid  ID");
+				break;
+			default:
+				displayNotFound("Error occurred: " + xhr.status);
+				break;
+			}
+		}
+	}
+	xhr.send();
+}
+
+
+function createCases(cases) {
+	let caseJson = JSON.stringify(cases);
+	console.log(caseJson);
+	let xhr = new XMLHttpRequest();
+	xhr.open('POST', 'api/cases');
+	xhr.setRequestHeader('Content-type', 'application/json');
+	xhr.onreadystatechange = function() {
+		if (xhr.readyState === 4) {
+			switch (xhr.status) {
+			case 200:
+			case 201:
+				caseJson = xhr.responseText;
+				let cases = JSON.parse(caseJson);
+				displaySingleCases(cases);
+				break;
+			case 400:
+				displayNotFound("Invalid  data: " + caseJson);
+				break;
+			default:
+				displayNotFound("Error occurred: " + xhr.status);
+				break;
+			}
+		}
+	}
+	xhr.send(caseJson);
+	
+}
+
+
+
+
+
 	
 function displayAllCases(cases) {
-let caseDiv = document.getElementById('caseData')
+let caseDiv = document.getElementById('caseData');
 
 let table = document.createElement('table');
-  let tableHead = document.createElement('thead');
+let tableHead = document.createElement('thead');
   let tableHeaderRow = document.createElement('tr');
 
   let tableHeaderRowState = document.createElement('th');
@@ -163,7 +268,7 @@ let table = document.createElement('table');
 	let tableRowTTR = document.createElement('td');
 
 
-    // console.log(item['abbr']);
+   
     tableRowState.textContent = item['state'];
 	tableRowPositive.textContent = item['positive'];
 	tableRowNegative.textContent = item['negative'];
@@ -173,6 +278,7 @@ let table = document.createElement('table');
 	tableRowDeath.textContent = item['death'];
 	tableRowHospitalized.textContent = item['hospitalized'];
 	tableRowTTR.textContent = item['totalTestResult'];
+	
     // attach table data to table row, then the row to the overall body
     tableRow.appendChild(tableRowState);
 	tableRow.appendChild(tableRowPositive);
@@ -185,25 +291,70 @@ let table = document.createElement('table');
 	tableRow.appendChild(tableRowTTR);
 	
 
-	tableBody.appendChild(tableRow);
-	tableRow.addEventListener('click', function (e){
+	 tableBody.appendChild(tableRow);
+	tableRow.addEventListener('click', function (event){
 		getCasesById(item.id);
 	 });
+	 tableBody.border = '1px solid black';
+	 table.border = '1 px solid black';
+	 table.appendChild(tableBody);
+	
   });
   // finally, append the table body to the whole table
-  tableBody.border = '1px solid black';
-  table.border = '1 px solid black';
-  table.appendChild(tableBody);
   caseDiv.appendChild(table);
-
- 
 
 }
 
 
+
+function updateCase(cases){
+	console.log("old state: " + cases.state);
+	var xhr = new XMLHttpRequest();
+	xhr.open('PUT','api/cases/'+ cases.id,true);
+	xhr.setRequestHeader("Content-type", "application/json");
+	xhr.onreadystatechange = function() {
+		if (xhr.readyState === 4 && xhr.status === 200) {
+			var cases = JSON.parse(xhr.responseText);
+			displaySingleCases(cases);
+		}
+
+};
+
+let form = document.getElementById('updateForm');
+let data = {
+				state: form.state.value,
+				positive: form.positive.value,
+				negative: form.negative.value,
+				inIcu: form.inIcu.value,
+				onVentilator: form.onVentilator.value,
+				recovered: form.recovered.value,
+				death: form.death.value,
+				hospitalized: form.hospitalized.value,
+				totalTestResult: form.totalTestResults.value
+
+}
+console.log("updated state " + data.state);
+xhr.send(JSON.stringify(data));
+}
+
+
+function deleteCase(caseId){
+	var xhr = new XMLHttpRequest();
+	xhr.open('DELETE', 'api/cases/'+caseId);
+	xhr.setRequestHeader("Content-type", "application/json");
+	xhr.onreadystatechange = function(){
+		let dataDiv = document.getElementById('caseData');
+		dataDiv.textContent = ' ';
+		let delMsg = document.createElement('li');
+		delMsg.textContent = "Deleted !!"
+		dataDiv.appendChild(delMsg);
+	
+	}
+	xhr.send();
+}
+
 function displayNotFound(msg) {
 	var caseDiv = document.getElementById('caseData');
-	// var actorDiv = document.getElementById('actorData');
 	caseDiv.textContent = msg;	
-	// actorDiv.textContent = '';
+	
 }
