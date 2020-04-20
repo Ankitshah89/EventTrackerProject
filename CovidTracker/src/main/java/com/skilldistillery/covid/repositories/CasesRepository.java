@@ -9,5 +9,8 @@ import com.skilldistillery.covid.entities.Cases;
 public interface CasesRepository extends JpaRepository<Cases, Integer> {
 	
 	List <Cases> findByState(String name);
+	
+
+	
 
 }

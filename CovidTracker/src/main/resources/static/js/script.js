@@ -8,12 +8,25 @@ function init() {
 		var caseId = document.caseForm.caseId.value;
 		if (!isNaN(caseId) && caseId > 0) {
 			getCasesById(caseId);
+			
 		}
 	});
+
+	document.caseForm.textLookup.addEventListener('click',function(event){
+		event.preventDefault();
+		var caseText = document.caseForm.keyword.value;
+		if(caseText.length == 2){
+				getCasesByText(caseText);
+		}
+	});
+
+
+
 	document.caseForm.listAll.addEventListener('click', function(event){
 		event.preventDefault();
 		getAllCases();
 	});
+
 
 	document.newForm.submit.addEventListener('click', function(event) {
 		event.preventDefault();
@@ -34,6 +47,9 @@ function init() {
 
 }
 
+
+
+
 function getCasesById(caseId) {
 	let xhr = new XMLHttpRequest();
 	xhr.open('GET', 'api/cases/' + caseId );
@@ -49,6 +65,32 @@ function getCasesById(caseId) {
 				break;
 			case 404:
 				displayNotFound("Invalid ID");
+				break;
+			default:
+				displayNotFound("Error occurred: " + xhr.status);
+				break;
+			}
+		}
+	}
+	xhr.send();
+}
+
+function getCasesByText(caseText) {
+	let xhr = new XMLHttpRequest();
+	xhr.open('GET', 'api/cases/search/' + caseText );
+	xhr.onreadystatechange = function() {
+		if (xhr.readyState === 4) {
+			switch (xhr.status) {
+			case 200:
+				let casesJson = xhr.responseText;
+				console.log(casesJson);
+				console.log ("STATUS" + xhr.status);
+				let cases = JSON.parse(casesJson);
+				console.log(cases);
+				displaySingleCases(cases);
+				break;
+			case 404:
+				displayNotFound("Invalid Text");
 				break;
 			default:
 				displayNotFound("Error occurred: " + xhr.status);
@@ -88,6 +130,9 @@ function displaySingleCases(cases) {
 	li = document.createElement('li');
 	li.textContent = 'Death : ' + cases.death;
 	ul.appendChild(li);
+	li = document.createElement('li');
+	li.textContent = 'Death : ' + cases.death;
+	ul.appendChild(li);
 	li.textContent = 'Hospitalized : ' + cases.hospitalized;
 	ul.appendChild(li);
 	li = document.createElement('li');
@@ -104,8 +149,6 @@ function displaySingleCases(cases) {
 
 	document.getElementById('update').addEventListener('click',function(event){
 		event.preventDefault();
-		console.log("need to update"+ cases.id);
-		// let form = document.getElementById('updateForm');
 		updateCase(cases);
 	});
 
@@ -335,10 +378,7 @@ function deleteCase(caseId){
 	xhr.onreadystatechange = function(){
 		let dataDiv = document.getElementById('caseData');
 		dataDiv.textContent = ' ';
-		let delMsg = document.createElement('li');
-		delMsg.textContent = "Deleted !!"
-		dataDiv.appendChild(delMsg);
-	
+		dataDiv.innerHTML = "Deleted !!";
 	}
 	xhr.send();
 }

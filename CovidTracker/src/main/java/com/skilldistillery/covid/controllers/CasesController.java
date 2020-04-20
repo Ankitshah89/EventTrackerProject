@@ -47,8 +47,9 @@ public class CasesController {
 	}
 
 	@GetMapping("cases/search/{keyword}")
-	public List<Cases> getCasesByKeyword(@PathVariable String keyword) {
-		return casesSvc.findByState(keyword);
+	public List<Cases> getCasesByKeyword(@PathVariable String keyword, HttpServletResponse response) { 
+			 return casesSvc.findByState(keyword); 
+		
 	}
 
 	@PostMapping("cases")
