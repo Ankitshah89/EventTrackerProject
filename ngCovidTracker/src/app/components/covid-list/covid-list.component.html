@@ -1,0 +1,238 @@
+<!-- <div class="container">
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" [routerLink]="['/home']">Home</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <a class="nav-link" [routerLink]="['/covid']" (click)="addForm = false ;mainPage=false; displayTable()" >List All</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" [routerLink]="['/covid']" (click)="addForm = true">Add Cases</a>
+      </li>
+    </ul>
+  </div>
+
+</nav>
+</div> -->
+
+
+  <div id="navigation-bar">
+    <ul>
+      <a href="#"><i class="fa fa-user"></i><span>Home</span></a>
+      <a class="nav-link" [routerLink]="['/covid']" (click)="addForm = false ;mainPage=false; displayTable()" >List All
+        <i class="fa fa-home"></i><span></span></a>
+      <a class="nav-link" [routerLink]="['/covid']" (click)="addForm = true">Add Cases
+      </a>
+
+
+    </ul>
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+<div *ngIf="!selected && !addForm && !mainPage" >
+<table >
+  <thead>
+    <tr>
+        <th></th>
+      <th></th>
+      <th></th>
+      <th>ID</th>
+
+
+      <th>State</th>
+      <th>Positive</th>
+      <th>Negative</th>
+      <th>In ICU</th>
+      <th>On Ventilator</th>
+      <th>Recovered</th>
+      <th>Death</th>
+      <th>Hospitalized</th>
+      <th>Total Rest Results</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+
+
+  <tbody>
+    <tr *ngFor="let covid of covids">
+      <td (click)="selected = covid">
+      <td>
+      </td>
+      <td ></td>
+      <td (click)="selected = covid"> {{covid.id}} </td>
+      <td (click)="selected = covid"> {{covid.state}} </td>
+      <td (click)="selected = covid"> {{covid.positive}} </td>
+      <td (click)="selected = covid"> {{covid.negative}} </td>
+      <td (click)="selected = covid"> {{covid.inIcu}} </td>
+      <td (click)="selected = covid"> {{covid.onVentilator}} </td>
+      <td (click)="selected = covid"> {{covid.recovered}} </td>
+      <td (click)="selected = covid"> {{covid.death}} </td>
+      <td (click)="selected = covid"> {{covid.hospitalized}} </td>
+      <td (click)="selected = covid"> {{covid.totalTestResult}} </td>
+
+
+      <td>
+        <button type="button" class="btn btn-primary"(click)="displayCovid(covid)">Select</button> </td>
+      <td><button type="button" class="btn btn-danger"(click)="deleteCovid(covid.id)">Delete</button></td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+<br><br><br><br>
+<div *ngIf="addForm">
+<form>
+
+   <label for="state">State</label>
+  <input type="text"  class="form-control" name="state" placeholder="state"
+    [(ngModel)]="newCovid.state" />
+    <br>
+    <label for="positive">Positive</label>
+    <input type="number" style="margin: 5px" class="form-control" name="positive" placeholder="postive"
+    [(ngModel)]="newCovid.positive" />
+    <label for="negative">Negative</label>
+    <input type="number" style="margin: 5px" class="form-control" name="negative" placeholder="negative"
+    [(ngModel)]="newCovid.negative" />
+    <label for="inIcu">In ICU</label>
+    <input type="number" style="margin: 5px" class="form-control" name="inIcu" placeholder="In Icu"
+    [(ngModel)]="newCovid.inIcu" />
+    <label for="onVentilator">On Ventilator</label>
+    <input type="number" style="margin: 5px" class="form-control" name="onVentilator" placeholder="On Ventilator"
+    [(ngModel)]="newCovid.onVentilator" />
+    <label for="recovered">Recovered</label>
+    <input type="number" style="margin: 5px" class="form-control" name="recovered" placeholder="Recovered"
+    [(ngModel)]="newCovid.recovered" />
+    <label for="death">Death</label>
+    <input type="number" style="margin: 5px" class="form-control" name="death" placeholder="Deaths"
+    [(ngModel)]="newCovid.death" />
+    <label for="hospitalized">Hospitalized</label>
+    <input type="number" style="margin: 5px" class="form-control" name="hospitalized" placeholder="Hospitalized"
+    [(ngModel)]="newCovid.hospitalized" />
+    <label for="totalTestResult">Total Test Results</label>
+    <input type="number" style="margin: 5px" class="form-control" name="totalTestResult" placeholder="Total Test Result"
+    [(ngModel)]="newCovid.totalTestResult" />
+
+
+    <input type="submit" class="btn btn-primary" style="margin: 5px;" value="Add Cases" (click)="addCovid(newCovid);
+    addForm = null; displayCovid(newCovid)"/>
+
+
+      </form>
+
+</div>
+
+
+
+
+
+ <div *ngIf="selected && !mainPage && !addForm">
+   <br>
+   <br><br>
+   <table class = "table table-hover">
+     <thead>
+      <tr>
+        <th scope="col">State</th>
+        <th scope="col">Positive</th>
+        <th scope="col">Negative</th>
+        <th scope="col">In ICU</th>
+        <th scope="col">On Ventilator</th>
+        <th scope="col">Recovered</th>
+        <th scope="col">Death</th>
+        <th scope="col">Hospitalized</th>
+        <th scope="col">Total Test Results</th>
+      </tr>
+     </thead>
+     <tbody>
+
+<tr>
+  <td >{{selected.state}}</td>
+  <td >{{selected.positive}}</td>
+  <td >{{selected.negative}}</td>
+  <td >{{selected.inIcu}}</td>
+  <td >{{selected.onVentilator}}</td>
+  <td  >{{selected.recovered}}</td>
+  <td >{{selected.death}}</td>
+  <td >{{selected.hospitalized}}</td>
+  <td >{{selected.totalTestResult}}</td>
+</tr>
+
+  </tbody>
+    <button class="btn btn-success" (click)="displayTable()">Back</button>
+    <button type="submit" style="margin: 5px;" class="btn btn-info" (click)="setEditCovid()"
+     value="Add Item">Edit</button>
+
+</table>
+
+</div>
+
+
+
+
+<div *ngIf="editCovid && !addForm">
+<br><br><br>
+  <form>
+    <h3>Update</h3>
+    <br>
+    <label for="state">State</label>
+    <input type="text"  class="form-control" name="state" placeholder="state"
+      [(ngModel)]="editCovid.state" />
+      <br>
+      <label for="positive">Positive</label>
+      <input type="number" style="margin: 5px" class="form-control" name="positive" placeholder="postive"
+      [(ngModel)]="editCovid.positive" />
+      <label for="negative">Negative</label>
+      <input type="number" style="margin: 5px" class="form-control" name="negative" placeholder="negative"
+      [(ngModel)]="editCovid.negative" />
+      <label for="inIcu">In ICU</label>
+      <input type="number" style="margin: 5px" class="form-control" name="inIcu" placeholder="In Icu"
+      [(ngModel)]="editCovid.inIcu" />
+      <label for="onVentilator">On Ventilator</label>
+      <input type="number" style="margin: 5px" class="form-control" name="onVentilator" placeholder="On Ventilator"
+      [(ngModel)]="editCovid.onVentilator" />
+      <label for="recovered">Recovered</label>
+      <input type="number" style="margin: 5px" class="form-control" name="recovered" placeholder="Recovered"
+      [(ngModel)]="editCovid.recovered" />
+      <label for="death">Death</label>
+      <input type="number" style="margin: 5px" class="form-control" name="death" placeholder="Deaths"
+      [(ngModel)]="editCovid.death" />
+      <label for="hospitalized">Hospitalized</label>
+      <input type="number" style="margin: 5px" class="form-control" name="hospitalized" placeholder="Hospitalized"
+      [(ngModel)]="editCovid.hospitalized" />
+      <label for="totalTestResult">Total Test Results</label>
+      <input type="number" style="margin: 5px" class="form-control" name="totalTestResult" placeholder="Total Test Result"
+      [(ngModel)]="editCovid.totalTestResult" />
+
+    <input type="submit" name='todo' style="margin: 5px;" class="btn btn-success"
+      (click)="updateCovid(editCovid,editCovid.id)" (click)="displayCovid(editCovid)" value="Update" />
+    <input type="reset" class="btn btn-info" (click)="displayTable()" (click)="selected=null"
+      value="Cancel" />
+  </form>
+
+
+
+</div>
+
+
+
+
+
+
+
+
